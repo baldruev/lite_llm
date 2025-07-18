@@ -1,0 +1,49 @@
+### Python ###
+# Byte-compiled files
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyd
+
+# Virtual environments
+.env/
+.venv/
+venv/
+env/
+ENV/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+*.egg
+*.whl
+__pypackages__/
+
+# IDE & Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.ropeproject
+
+# Testing & Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+test_results/
+
+### Environment ###
+# Secrets and configs
+.env
+.env.local
+.env.*.local
+secrets.ini
+credentials.json
+*.key
+*.pem
+*.cert

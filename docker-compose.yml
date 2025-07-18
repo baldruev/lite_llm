@@ -1,0 +1,95 @@
+version: '3.8'
+services:
+  litellm:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: litellm
+    ports:
+      - "4000:4000"
+    environment:
+      - DATABASE_URL=postgresql://litellm_user:litellm_password@postgres_litellm:5432/dbname
+    volumes:
+      - ./config.yaml:/app/config.yaml
+    depends_on:
+      - postgres_litellm
+    networks:
+      - litellm_network
+    restart: unless-stopped
+
+  postgres_litellm:
+    image: postgres:15
+    container_name: postgres_litellm
+    environment:
+      - POSTGRES_USER=litellm_user
+      - POSTGRES_PASSWORD=litellm_password
+      - POSTGRES_DB=dbname
+    ports:
+      - "5444:5432"
+    volumes:
+      - pgdata_litellm:/var/lib/postgresql/data
+      # - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - litellm_network
+    restart: unless-stopped
+
+  postgres_keyservice:
+    image: postgres:15
+    container_name: postgres_keyservice
+    environment:
+      - POSTGRES_USER=keyservice_user
+      - POSTGRES_PASSWORD=keyservice_password
+      - POSTGRES_DB=keydb
+    ports:
+      - "5445:5432"
+    volumes:
+      - pgdata_keyservice:/var/lib/postgresql/data
+    networks:
+      - litellm_network
+    restart: unless-stopped
+
+  keyservice:
+    build:
+      context: ./keyservice
+      dockerfile: Dockerfile
+    container_name: keyservice
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_PORT=8000
+      - LITELLM_URL=http://litellm:4000
+      - MASTER_KEY=sk-1234
+      - DB_SCHEMA=public
+      - DB_USER=keyservice_user
+      - DB_PASSWORD=keyservice_password
+      - DB_HOST=postgres_keyservice
+      - DB_PORT=5432
+      - DB_NAME=keydb
+      - DATABASE_URL=postgresql://keyservice_user:keyservice_password@postgres_keyservice:5432/keydb
+    depends_on:
+      - postgres_keyservice
+      - litellm
+    networks:
+      - litellm_network
+    restart: unless-stopped
+
+  pgweb:
+    image: sosedoff/pgweb
+    container_name: pgweb
+    ports:
+      - "8081:8081"
+    environment:
+      - PGWEB_DATABASE_URL=postgres://litellm_user:litellm_password@postgres_litellm:5432/dbname?sslmode=disable
+    depends_on:
+      - postgres_litellm
+    networks:
+      - litellm_network
+    restart: unless-stopped
+
+networks:
+  litellm_network:
+    driver: bridge
+
+volumes:
+  pgdata_litellm:
+  pgdata_keyservice:

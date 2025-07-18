@@ -1,0 +1,42 @@
+Примеры запросов
+Создание ключа
+curl -X POST "http://localhost:8000/key/generate" -H "Content-Type: application/json" -d '{"username": "user"}'
+
+curl -X POST "http://localhost:8000/key/generate" -H "Content-Type: application/json"  -d '{"username": "user1", "rpm_limit": 10, "max_budget": 1000, "budget_duration": "5m"}'
+
+Сохраняет в таблицу LiteLLM_VerificationToken
+
+Генерация нового ключа
+curl -X PUT "http://localhost:8000/key/update" -H "Content-Type: application/json" -d '{"key": "sk-xxx", "new_username": "user2"}'
+
+Валидация ключа
+curl "http://localhost:8000/key/validate?username=user"
+
+
+
+Создать пользователя, Budjet, Rate Limit можно через /user/new или key/create
+curl --location 'http://0.0.0.0:4000/user/new' \
+--header 'Authorization: Bearer sk-1234' \
+--header 'Content-Type: application/json' \
+--data '{"user_id": "user2", "rpm_limit": 10, "max_budget": 1000, "budget_duration": "30d"}'
+
+
+curl --location 'http://0.0.0.0:4000/key/generate' \
+--header 'Authorization: Bearer sk-1234' \
+--header 'Content-Type: application/json' \
+--data '{"user_id": "user3", "rpm_limit": 10, "max_budget": 1000, "budget_duration": "30d"}'
+
+
+
+docker exec -it postgres_litellm psql -U litellm_user -d dbname
+docker exec -it postgres_keyservice psql -U keyservice_user -d keydb
+
+curl --location --request POST 'http://localhost:4000/key/sk-xVq-V7me-GV5ru6IRB5EoQ/regenerate'     --header 'Authorization: Bearer sk-1234'     --header 'Content-Type: application/json'     --data-raw '{
+
+
+curl --location 'http://0.0.0.0:4000/key/list' \
+--header 'Authorization: Bearer sk-1234'
+
+curl -X GET "http://0.0.0.0:4000/key/info?key=sk-V7ZbigCRmIsnKysBFhmV8w" -H "Authorization: Bearer sk-1234"
+
+curl -X GET "http://0.0.0.0:4000/models" -H "Authorization: Bearer sk-V7ZbigCRmIsnKysBFhmV8w"
