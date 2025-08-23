@@ -12,5 +12,5 @@ COPY . .
 RUN ls
 
 # Запуск FastAPI
-CMD ["python", "-c", "from project.keygen.api.app import main; main()"]
-# CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+# CMD ["python", "-c", "from project.keygen.api.app import main; main()"]
+CMD ["uvicorn", "project.keygen.main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -11,8 +11,8 @@ model_list:
 litellm_settings:
   default_key_generate_params:
     max_budget: 1000.00 # (float) sets max budget as $0 USD
-    budget_duration: 30d
-    rpm_limit: 5
+    budget_duration: 5m
+    rpm_limit: 10
 
 general_settings:
   master_key: sk-1234

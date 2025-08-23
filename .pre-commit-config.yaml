@@ -1,0 +1,27 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-check
+        name: ruff linter
+        entry: ruff check
+        language: system
+        types: [python]
+        args: [--fix, --exit-non-zero-on-fix]
+
+      - id: ruff-format
+        name: ruff formatter
+        entry: ruff format
+        language: system
+        types: [python]
+
+      - id: check-yaml
+        name: check yaml syntax
+        entry: python -c "import yaml, sys; [yaml.safe_load(open(f)) for f in sys.argv[1:]]"
+        language: system
+        files: \.(yaml|yml)$
+
+      - id: check-json
+        name: check json syntax
+        entry: python -c "import json, sys; [json.load(open(f)) for f in sys.argv[1:]]"
+        language: system
+        files: \.json$

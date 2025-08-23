@@ -66,6 +66,8 @@ services:
       - DB_PORT=5432
       - DB_NAME=keydb
       - DATABASE_URL=postgresql://keyservice_user:keyservice_password@postgres_keyservice:5432/keydb
+    volumes:
+      - ./keyservice:/app
     depends_on:
       - postgres_keyservice
       - litellm
@@ -93,3 +95,4 @@ networks:
 volumes:
   pgdata_litellm:
   pgdata_keyservice:
+  keyservice:

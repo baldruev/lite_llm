@@ -1,8 +1,10 @@
-from project.keygen.db.engine import get_session_maker
+from collections.abc import AsyncGenerator
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from project.keygen.db.engine import get_session_maker
 
-async def get_async_session() -> AsyncSession:
+
+async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
     session_maker = get_session_maker()
     async with session_maker() as session:
         try:
