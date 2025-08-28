@@ -29,6 +29,3 @@ class Key(BaseModel):
     blocked: bool
     created_at: str
     updated_at: str
-
-    class Config:
-        from_attributes = True
