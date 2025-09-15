@@ -1,1 +1,22 @@
-tet
+model_list:
+  - model_name: llama3
+    litellm_params:
+      model: ollama/llama3
+      api_base: http://localhost:11434
+    model_info:
+      health_check_timeout: 60
+      input_cost_per_token: 0.000006 # кастомная стоимость токена
+      output_cost_per_token: 0.00003 # кастомная стоимость токена
+
+litellm_settings:
+  default_key_generate_params:
+    max_budget: 1000.00 # (float) sets max budget as $0 USD
+    budget_duration: 5m
+    rpm_limit: 10
+
+general_settings:
+  master_key: sk-1234
+  database_url: "postgresql://litellm_user:litellm_password@postgres_litellm:5432/dbname"
+  background_health_checks: true
+  health_check_interval: 60
+  store_model_in_db: true # Если значение равно true, позволяет сохранять информацию о модели и учетных данных в базе данных.
