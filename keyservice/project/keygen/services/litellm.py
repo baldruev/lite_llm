@@ -19,7 +19,7 @@ class LiteLLMService:
         request: CreateUserRequest,
     ) -> User:
         headers = {"Authorization": f"Bearer {app_settings.MASTER_KEY}"}
-        data = {"user_id": request.username, "auto_create_key": False}
+        data = {"user_id": request.username, "auto_create_key": False, "user_email": request.username + "@megafon.ru"}
         if request.rpm_limit is not None:
             data["rpm_limit"] = request.rpm_limit
         if request.max_budget is not None:
