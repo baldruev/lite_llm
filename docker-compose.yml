@@ -88,29 +88,29 @@ services:
       - litellm_network
     restart: unless-stopped
 
-  locust:
-    image: locustio/locust
-    container_name: locust
-    ports:
-      - "8089:8089"  # Web-интерфейс Locust
-    volumes:
-      - ./keyservice/project/keygen:/home/locust  # Монтируем директорию с тестами
-    environment:
-      - LOCUST_HOST=http://keyservice:8000  # Целевой хост для тестирования
-    command: -f /home/locust/locustfile.py --host=http://keyservice:8000
-    depends_on:
-      - keyservice
-    networks:
-      - litellm_network
-    # Ограничения ресурсов (опционально)
-    deploy:
-      resources:
-        limits:
-          cpus: '0.2'
-          memory: 512M
-        reservations:
-          cpus: '0.1'
-          memory: 128M
+  # locust:
+  #   image: locustio/locust
+  #   container_name: locust
+  #   ports:
+  #     - "8089:8089"  # Web-интерфейс Locust
+  #   volumes:
+  #     - ./keyservice/project/keygen:/home/locust  # Монтируем директорию с тестами
+  #   environment:
+  #     - LOCUST_HOST=http://keyservice:8000  # Целевой хост для тестирования
+  #   command: -f /home/locust/locustfile.py --host=http://keyservice:8000
+  #   depends_on:
+  #     - keyservice
+  #   networks:
+  #     - litellm_network
+  #   # Ограничения ресурсов (опционально)
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '0.2'
+  #         memory: 512M
+  #       reservations:
+  #         cpus: '0.1'
+  #         memory: 128M
 
 networks:
   litellm_network:

@@ -20,14 +20,7 @@ class LiteLLMService:
     ) -> User:
         headers = {"Authorization": f"Bearer {app_settings.MASTER_KEY}"}
         data = {"user_id": request.username, "auto_create_key": False, "user_email": request.username + "@megafon.ru"}
-        if request.rpm_limit is not None:
-            data["rpm_limit"] = request.rpm_limit
-        if request.max_budget is not None:
-            data["max_budget"] = request.max_budget
-        if request.budget_duration is not None:
-            data["budget_duration"] = request.budget_duration
-        if request.max_parallel_requests is not None:
-            data["max_parallel_requests"] = request.max_parallel_requests
+
         if request.team_id is not None:
             data["team_id"] = request.team_id
 
@@ -50,7 +43,7 @@ class LiteLLMService:
 
     async def create_team(
         self,
-        request: TeamRequest = TeamRequest(),
+        request: TeamRequest,
     ) -> TeamSchema:
         headers = {"Authorization": f"Bearer {app_settings.MASTER_KEY}"}
         data = {"team_alias": request.team_alias}
@@ -83,7 +76,11 @@ class LiteLLMService:
         request: CreateKeyRequest,
     ) -> Key:
         headers = {"Authorization": f"Bearer {app_settings.MASTER_KEY}"}
-        data = {"user_id": request.username}
+        data = {
+            "user_id": request.username,
+            "key_type": request.llm_api,
+            "models": [request.models],
+        }
         if request.rpm_limit is not None:
             data["rpm_limit"] = request.rpm_limit
         if request.max_budget is not None:

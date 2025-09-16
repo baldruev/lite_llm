@@ -48,10 +48,6 @@ class KeyGenerationService:
 
             user_data = CreateUserRequest(
                 username=request.username,
-                rpm_limit=request.rpm_limit,
-                max_budget=request.max_budget,
-                budget_duration=request.budget_duration,
-                max_parallel_requests=request.max_parallel_requests,
                 team_id=existing_team.team_id,
             )
             new_user = await self.lite_llm_service.create_user(user_data)
