@@ -15,5 +15,15 @@ class Settings(BaseSettings):
     DB_PORT: int
     DB_NAME: str
 
+    RPM_LIMIT: int = 100
+    TPM_LIMIT: int = 200000
+    MAX_BUDGET: float = 50.0
+    BUDGET_DURATION: str = "30d"
+    MAX_PARALLEL_REQUESTS: int = 2
+    MODELS: list = ["general-models"]
+    KEY_TYPE: str = "llm_api"
+
+    TEAM_ALIAS: str = "default"
+
 
 app_settings = Settings()

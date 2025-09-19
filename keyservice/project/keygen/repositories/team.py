@@ -37,7 +37,7 @@ class TeamRepository:
             await self.session.rollback()
             raise TeamCreateError(f"Ошибка создания команды: {str(e)}")
 
-    async def get_team(self, team_request: TeamRequest = TeamRequest()) -> TeamModel | None:
+    async def get_team(self, team_request: TeamRequest) -> TeamModel | None:
         """Получить команду по названию"""
         try:
             result = await self.session.execute(

@@ -1,8 +1,8 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class TeamRequest(BaseModel):
-    team_alias: str = Field("default")
+    team_alias: str | None = None
 
 
 class TeamSchema(BaseModel):

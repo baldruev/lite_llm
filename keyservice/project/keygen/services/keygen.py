@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from project.keygen.schemas.teams import TeamRequest
 from project.keygen.schemas.users import CreateUserRequest
 from project.keygen.repositories.team import TeamRepository
 from project.keygen.utils.exceptions import KeyNotFoundError, UserNotFoundError
@@ -9,7 +10,7 @@ from project.keygen.repositories.keys import KeyRepository
 from project.keygen.models.keys import Key as KeyModel
 from project.keygen.schemas.keys import CreateKeyRequest, Key as KeySchema
 from project.keygen.utils.logger import get_logger
-
+from project.keygen.config import app_settings
 
 logger = get_logger(__name__)
 
@@ -41,9 +42,10 @@ class KeyGenerationService:
         existing_user = await self.user_repository.get_user(request.username)
         # проверяем есть пользователь в БД, если нет создаем пользователя и ключ
         if existing_user is None:
-            existing_team = await self.team_repository.get_team()
+            team_request = TeamRequest(team_alias=app_settings.TEAM_ALIAS)
+            existing_team = await self.team_repository.get_team(team_request)
             if existing_team is None:
-                new_team = await self.lite_llm_service.create_team()
+                new_team = await self.lite_llm_service.create_team(team_request)
                 existing_team = await self.team_repository.create_team(new_team)
 
             user_data = CreateUserRequest(
@@ -56,7 +58,21 @@ class KeyGenerationService:
         # проверяем есть ключ в БД, если нет создаем новый
         existing_key = await self.key_repository.get_key_by_username(existing_user.username)
         if existing_key is None:
-            new_key = await self.lite_llm_service.generate_new_key(request)
+            new_request = CreateKeyRequest(
+                username=request.username,
+                rpm_limit=request.rpm_limit if request.rpm_limit is not None else app_settings.RPM_LIMIT,
+                tpm_limit=request.tpm_limit if request.tpm_limit is not None else app_settings.TPM_LIMIT,
+                max_budget=request.max_budget if request.max_budget is not None else app_settings.MAX_BUDGET,
+                budget_duration=request.budget_duration or app_settings.BUDGET_DURATION,
+                max_parallel_requests=(
+                    request.max_parallel_requests
+                    if request.max_parallel_requests is not None
+                    else app_settings.MAX_PARALLEL_REQUESTS
+                ),
+                models=request.models if request.models else app_settings.MODELS,
+                key_type=request.key_type if request.key_type else app_settings.KEY_TYPE,
+            )
+            new_key = await self.lite_llm_service.generate_new_key(new_request)
             existing_key = await self.key_repository.create_key(new_key)
 
         return existing_key
@@ -79,9 +95,12 @@ class KeyGenerationService:
             CreateKeyRequest(
                 username=old_key.username,
                 rpm_limit=old_key.rpm_limit,
+                tpm_limit=old_key.tpm_limit,
                 max_budget=old_key.max_budget,
                 budget_duration=old_key.budget_duration,
                 max_parallel_requests=old_key.max_parallel_requests,
+                models=old_key.models,
+                key_type=old_key.key_type,
             )
         )
 

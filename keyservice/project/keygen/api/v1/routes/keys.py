@@ -40,7 +40,7 @@ async def get_key_generation_service(db: AsyncSession = Depends(get_async_sessio
 
 
 @router.post(
-    "/key/generate",
+    "/api/v1/key/generate",
     response_model=OnlyKeySchema,
     status_code=status.HTTP_201_CREATED,
     summary="Генерация нового ключа",
@@ -104,7 +104,7 @@ async def generate_key(
 
 
 @router.post(
-    "/key/update",
+    "/api/v1/key/update",
     response_model=dict[str, str],
     summary="Обновление ключа",
     description="Блокирует старый ключ и генерирует новый ключ пользователя",
@@ -169,7 +169,7 @@ async def update_key(
 
 
 @router.get(
-    "/key/validate",
+    "/api/v1/key/validate",
     response_model=ValidateKeyResponse,
     summary="Проверка ключа",
     description="Проверяет наличие ключа у пользователя",
@@ -234,7 +234,7 @@ async def validate_key(
 
 
 @router.delete(
-    "/key/delete",
+    "/api/v1/key/delete",
     response_model=dict[str, str],
     summary="Удаление ключа",
     description="Удаляет (блокирует) ключ пользователя в системе и LiteLLM",
@@ -299,7 +299,7 @@ async def delete_key(
 
 
 @router.get(
-    "/key/info",
+    "/api/v1/key/info",
     response_model=Key,
     summary="Получение информации о ключе",
     description="Возвращает подробную информацию о ключе по его значению",

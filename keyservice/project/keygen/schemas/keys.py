@@ -1,14 +1,15 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class CreateKeyRequest(BaseModel):
     username: str
-    rpm_limit: int = Field(100, description="Ограничение запросов в минуту")
-    max_budget: float = Field(50.0, description="Максимальный бюджет за период")
-    budget_duration: str = Field("30d", description="Длительность бюджета, например, '30d'")
-    max_parallel_requests: int = Field(2, description="Максимум параллельных запросов")
-    models: str = Field("general-models", description="Доступная группа моделей")
-    llm_api: str = Field("llm_api", description="Тип ключа")
+    rpm_limit: int | None = None
+    tpm_limit: int | None = None
+    max_budget: float | None = None
+    budget_duration: str | None = None
+    max_parallel_requests: int | None = None
+    models: list[str] | None = None
+    key_type: str | None = None
 
 
 class OnlyKeySchema(BaseModel):
@@ -23,10 +24,13 @@ class ValidateKeyResponse(BaseModel):
 class Key(BaseModel):
     username: str
     key: str
-    rpm_limit: int = None
+    rpm_limit: int | None = None
+    tpm_limit: int | None = None
     max_budget: float = None
     budget_duration: str = None
     max_parallel_requests: int | None = None
+    models: list | None = None
+    key_type: str | None = None
     expiration_date: str | None = None
     blocked: bool
     created_at: str

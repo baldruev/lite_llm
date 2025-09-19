@@ -1,22 +1,22 @@
 Примеры запросов
 Создание ключа
-curl -X POST "http://localhost:8000/key/generate" -H "Content-Type: application/json" -d '{"username": "user"}'
+curl -X POST "http://localhost:8000/api/v1/key/generate" -H "Content-Type: application/json" -d '{"username": "user"}'
 
-curl -X POST "http://localhost:8000/key/generate" -H "Content-Type: application/json"  -d '{"username": "user1", "rpm_limit": 10, "max_budget": 1000, "budget_duration": "5m"}'
+curl -X POST "http://localhost:8000/api/v1/key/generate" -H "Content-Type: application/json"  -d '{"username": "user2", "rpm_limit": 10, "tpm_limit": 10, "max_budget": 1000, "budget_duration": "5m"}'
 
 Сохраняет в таблицу LiteLLM_VerificationToken
 
 Обновление ключа
-curl -X POST "http://localhost:8000/key/update" -H "Content-Type: application/json" -d '{"key": "sk-a4uAVLA6XWmd_uXzxdvxjA"}'
+curl -X POST "http://localhost:8000/api/v1/key/update" -H "Content-Type: application/json" -d '{"key": "sk-HrW7eFiknnF5KE5_v0DCIg"}'
 
 Валидация ключа
-curl "http://localhost:8000/key/validate?username=user"
+curl "http://localhost:8000/api/v1/key/validate?username=user"
 
 Удаление ключа
-curl -X DELETE "http://localhost:8000/key/delete" -H "Content-Type: application/json" -d '{"key": "sk-PjmWG0mNw57lw9an3GvK0w"}'
+curl -X DELETE "http://localhost:8000/api/v1/key/delete" -H "Content-Type: application/json" -d '{"key": "sk-PjmWG0mNw57lw9an3GvK0w"}'
 
 Информация о ключе
-curl -X GET "http://localhost:8000/key/info?key=sk-a4uAVLA6XWmd_uXzxdvxjA" 
+curl -X GET "http://localhost:8000/api/v1/key/info?key=sk-u5hRPuWA9iolBCeg_tQpUg" 
 
 Создать пользователя, Budjet, Rate Limit можно через /user/new или key/create
 curl --location 'http://0.0.0.0:4000/user/new' \
